@@ -68,3 +68,34 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+#### In client
+
+- Remove build and node_modules
+- Add .env to .gitignore file
+- Point api url to backend hosting url
+  - const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
+
+#### In Server
+
+- Remove node_modules
+- Add cors package and allow client url
+
+```js
+const allowlist = ["https://jobify-37q4.onrender.com"];
+const corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
+};
+
+app.use(cors(corsOptionsDelegate));
+```
+
+### Deploy in "render.com"
+
+Find tutorial video in the youtube in case of any difficulty: [https://www.youtube.com/watch?v=l134cBAJCuc]
