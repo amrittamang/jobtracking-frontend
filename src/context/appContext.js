@@ -64,7 +64,7 @@ const AppProvider = ({ children }) => {
 
     // axios
     const authFetch = axios.create({
-        baseURL: 'https://jobify-api.onrender.com/api/v1',
+        baseURL: 'https://jobify-api-g1x9.onrender.com/api/v1',
     })
 
     authFetch.interceptors.response.use(
