@@ -58,13 +58,14 @@ const initialState = {
 };
 
 const AppContext = React.createContext();
+const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
 
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     // axios
     const authFetch = axios.create({
-        baseURL: 'https://jobify-api-g1x9.onrender.com/api/v1',
+        baseURL,
     })
 
     authFetch.interceptors.response.use(
@@ -92,7 +93,7 @@ const AppProvider = ({ children }) => {
         dispatch({ type: SETUP_USER_BEGIN });
         try {
             const { data } = await axios.post(
-                `/api/v1/auth/${endPoint}`,
+                `${baseURL}/auth/${endPoint}`,
                 currentUser
             );
 
@@ -132,7 +133,7 @@ const AppProvider = ({ children }) => {
         dispatch({ type: ADD_JOB_BEGIN });
         try {
             const res = await axios.post(
-                "/api/v1/jobs",
+                `${baseURL}/jobs`,
                 job,
                 {
                     headers: {
@@ -173,7 +174,7 @@ const AppProvider = ({ children }) => {
     const editJob = async (id) => {
         try {
             const { position, company, jobLocation, jobType, status } = state;
-            const res = await fetch(`/api/v1/jobs/${state.editJobId}`, {
+            const res = await fetch(`${baseURL}/jobs/${state.editJobId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -195,7 +196,7 @@ const AppProvider = ({ children }) => {
 
     const deleteJob = async (id) => {
         try {
-            const response = await fetch(`api/v1/jobs/${id}`, {
+            const response = await fetch(`${baseURL}/jobs/${id}`, {
                 method: 'DELETE',
                 headers: {
                     "Content-Type": "application/json",
