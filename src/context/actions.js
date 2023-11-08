@@ -1,0 +1,22 @@
+export const SHOW_ALERT = 'SHOW_ALERT';
+export const HIDE_ALERT = "HIDE_ALERT";
+export const SHOW_SUCCESS_ALERT = 'SHOW_SUCCESS_ALERT';
+export const SHOW_ERROR_ALERT = 'SHOW_ERROR_ALERT';
+
+export const SETUP_USER_BEGIN = 'SETUP_USER_BEGIN';
+export const SETUP_USER_ERROR = 'SETUP_USER_ERROR';
+export const SETUP_USER_SUCCESS = 'SETUP_USER_SUCCESS';
+
+export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR';
+export const LOGOUT_USER = 'LOGOUT_USER';
+
+export const HANDLE_CHANGE = 'HANDLE_CHANGE';
+
+export const ADD_JOB_BEGIN = 'ADD_JOB_BEGIN';
+export const ADD_JOB_SUCCESS = 'ADD_JOB_SUCCESS';
+export const ADD_JOB_ERROR = 'ADD_JOB_ERROR';
+export const CLEAR_JOB = 'CLEAR_JOB';
+export const GET_JOBS_BEGINS = 'GET_JOBS_BEGINS';
+export const GET_JOBS_SUCCESS = 'GET_JOBS_SUCCESS';
+export const EDIT_JOB_BEGINS = 'EDIT_JOB_BEGINS';
+export const DELETE_JOB = 'DELETE_JOB';
