@@ -93,7 +93,7 @@ const AppProvider = ({ children }) => {
         dispatch({ type: SETUP_USER_BEGIN });
         try {
             const { data } = await axios.post(
-                `${baseURL}/auth/${endPoint}`,
+                `https://jobify-api-g1x9.onrender.com/api/v1/auth/${endPoint}`,
                 currentUser
             );
 
