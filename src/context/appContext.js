@@ -58,7 +58,8 @@ const initialState = {
 };
 
 const AppContext = React.createContext();
-const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
+// const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
+const baseURL = 'http://localhost:3000/api/v1'
 
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -92,8 +93,8 @@ const AppProvider = ({ children }) => {
     const setupUser = async ({ currentUser, endPoint, alertText }) => {
         dispatch({ type: SETUP_USER_BEGIN });
         try {
-            const { data } = await axios.post(
-                `https://jobify-api-g1x9.onrender.com/api/v1/auth/${endPoint}`,
+            const { data } = await authFetch.post(
+                `/auth/${endPoint}`,
                 currentUser
             );
 
