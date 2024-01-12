@@ -1,6 +1,6 @@
 import React, { useReducer, useContext } from "react";
 
-import reducer from "./reducer";
+import actionDispatcher from "./reducer";
 import axios from "axios";
 
 import {
@@ -62,7 +62,7 @@ const AppContext = React.createContext();
 const baseURL = 'http://localhost:3000/api/v1'
 
 const AppProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(actionDispatcher, initialState);
 
     // axios
     const authFetch = axios.create({

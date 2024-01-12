@@ -20,7 +20,7 @@ import {
 
 import { initialState } from './appContext';
 
-const reducer = (state, action) => {
+const actionDispatcher = (state, action) => {
     switch (action.type) {
         case SHOW_ALERT:
             return {
@@ -155,4 +155,4 @@ const reducer = (state, action) => {
     }
 }
 
-export default reducer;
+export default actionDispatcher;

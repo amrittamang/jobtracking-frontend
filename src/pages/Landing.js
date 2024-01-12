@@ -4,10 +4,11 @@ import { Logo } from '../components';
 import { Link, Navigate } from 'react-router-dom';
 import main from '../assets/images/main.svg';
 import { useAppContext } from '../context/appContext';
+import { useSelector } from 'react-redux';
 
 const Landing = () => {
     console.log("In Landing route");
-    const { user } = useAppContext();
+    const { user } = useSelector(state => state.account);
     return (
         <React.Fragment>
             {user && <Navigate to='/' />}
