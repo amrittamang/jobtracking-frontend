@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Logo, FormRow, Alert } from '../components';
 import Wrapper from "../assets/wrappers/LandingPage";
-import { useAppContext } from '../context/appContext';
 import { Form, useNavigate } from 'react-router-dom';
 import { accountAction } from '../store/account-slice';
+import { alertAction } from '../store/alert-slice';
 import axios from "axios";
 import {
     useSelector,
@@ -13,13 +13,13 @@ const initialState = {
     name: '',
     email: '',
     password: '',
-    isMember: true,
 };
 
-const Register = () => {
+const Login = () => {
     const navigate = useNavigate();
     const [values, setValues] = useState(initialState);
-    const { user, isLoading, showAlert } = useSelector(state => state.account);
+    const { user, userLoading } = useSelector(state => state.account);
+    const { showAlert } = useSelector(state => state.alert);
     const dispatch = useDispatch();
 
     // const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
@@ -44,57 +44,43 @@ const Register = () => {
         dispatch(accountAction.logOutUser());
     };
 
-    const toggleMember = () => {
-        setValues({ ...values, isMember: !values.isMember });
-    };
 
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const setupUser = async ({ currentUser, endPoint, alertText }) => {
+    const setupUser = async (currentUser) => {
         dispatch(accountAction.setUpUserBegin());
         try {
             const { data } = await authFetch.post(
-                `/auth/${endPoint}`,
+                `/auth/login`,
                 currentUser
             );
 
-            const { user, location, token } = data;
-            dispatch(accountAction.setUpUserSuccess({ user, location, alertText, token }));
+            const { user, location, token, jobLocation } = data;
+            dispatch(accountAction.setUpUserSuccess({ user, location, jobLocation, token }));
+            dispatch(alertAction.showAlert({ alertType: 'success', alertText: 'Login successful! Redirecting!' }))
         } catch (error) {
 
-            dispatch(accountAction.setUpUserError({ alertText: error.response.data.msg }))
+            dispatch(alertAction.showAlert({ alertType: 'danger', alertText: error.response.data.msg }))
         }
         setTimeout(() => {
-            dispatch(accountAction.hideAlert());
+            dispatch(alertAction.hideAlert());
         }, 3000);
     };
 
     const onSubmit = (e) => {
         e.preventDefault();
-        const { name, email, password, isMember } = values;
-        if (!email || !password || (!isMember && !name)) {
-            dispatch(accountAction.showAlert());
+        const { email, password } = values;
+        if (!email || !password) {
+            dispatch(alertAction.showAlert({ alertType: 'danger', alertText: 'Please provide required fields!' }));
             setTimeout(() => {
-                dispatch(accountAction.hideAlert());
+                dispatch(alertAction.hideAlert());
             }, 3000);
             return;
         }
-        const currentUser = { name, email, password };
-        if (!isMember) {
-            setupUser({
-                currentUser,
-                endPoint: 'register',
-                alertText: 'User Created! Redirecting...',
-            });
-        } else {
-            setupUser({
-                currentUser,
-                endPoint: 'login',
-                alertText: 'Login Successful! Redirecting...',
-            });
-        }
+        const currentUser = { email, password };
+        setupUser(currentUser);
     };
 
     useEffect(() => {
@@ -106,19 +92,10 @@ const Register = () => {
     }, [user, navigate]);
     return (
         <Wrapper className="full-page">
-            <form className="form" onSubmit={onSubmit}>
+            <form className="form" data-testid="login-form" onSubmit={onSubmit}>
                 <Logo />
-                <h3>{values.isMember ? 'Login' : 'Register'}</h3>
+                <h3>Login</h3>
                 {showAlert && <Alert />}
-                {/* name input */}
-                {!values.isMember && (
-                    <FormRow
-                        type="text"
-                        name="name"
-                        value={values.name}
-                        handleChange={handleChange}
-                    />
-                )}
                 {/* email input */}
                 <FormRow
                     type="email"
@@ -133,11 +110,11 @@ const Register = () => {
                     value={values.password}
                     handleChange={handleChange}
                 />
-                <button type="submit" className="btn btn-block" disabled={isLoading}>submit</button>
+                <button type="submit" className="btn btn-block" disabled={userLoading}>submit</button>
                 <button
                     type="button"
                     className="btn btn-block btn-hipster"
-                    disabled={isLoading}
+                    disabled={userLoading}
                     onClick={() => {
                         setupUser({
                             currentUser: { email: 'admin@admin.com', password: 'admin123' },
@@ -146,17 +123,14 @@ const Register = () => {
                         });
                     }}
                 >
-                    {isLoading ? 'loading' : 'demo app'}
+                    {userLoading ? 'loading' : 'demo app'}
                 </button>
                 <p>
-                    {values.isMember ? 'Not a member yet?' : 'Already a member?'}
-                    <button type='button' onClick={toggleMember} className='member-btn'>
-                        {values.isMember ? 'Register' : 'Login'}
-                    </button>
+                    <span onClick={() => navigate('/register')}>Register</span>
                 </p>
             </form>
         </Wrapper>
     );
 }
 
-export default Register;
+export default Login;

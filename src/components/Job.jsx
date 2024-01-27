@@ -1,9 +1,9 @@
 import moment from 'moment'
 import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
-import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/Job'
 import JobInfo from './JobInfo'
+import { useSelector } from 'react-redux';
 
 const Job = ({
     _id,
@@ -14,7 +14,7 @@ const Job = ({
     createdAt,
     status,
 }) => {
-    const { setEditJob, deleteJob } = useAppContext()
+    const { setEditJob, deleteJob } = useSelector(state => state.job);
 
     let date = moment(createdAt)
     date = date.format('MMM Do, YYYY')

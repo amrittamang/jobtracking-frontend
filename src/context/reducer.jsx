@@ -22,13 +22,13 @@ import { initialState } from './appContext';
 
 const actionDispatcher = (state, action) => {
     switch (action.type) {
-        case SHOW_ALERT:
+        /* case SHOW_ALERT:
             return {
                 ...state,
                 showAlert: true,
                 alertType: 'danger',
                 alertText: 'Please provide all values!',
-            };
+            }; */
         case SHOW_SUCCESS_ALERT:
             return {
                 ...state,
@@ -43,24 +43,24 @@ const actionDispatcher = (state, action) => {
                 alertType: 'danger',
                 alertText: action.payload.alertText || 'Something went wrong! Please try again later.'
             };
-        case HIDE_ALERT:
+        /* case HIDE_ALERT:
             return {
                 ...state,
                 showAlert: false,
                 alertType: '',
                 alertText: '',
-            };
-        case LOGOUT_USER:
-            return {
-                ...initialState,
-                userLoading: false,
-            };
-        case SETUP_USER_BEGIN:
+            }; */
+        /*  case LOGOUT_USER:
+             return {
+                 ...initialState,
+                 userLoading: false,
+             }; */
+        /* case SETUP_USER_BEGIN:
             return {
                 ...state,
                 isLoading: true,
-            };
-        case SETUP_USER_SUCCESS:
+            }; */
+        /* case SETUP_USER_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
@@ -72,20 +72,20 @@ const actionDispatcher = (state, action) => {
                 showAlert: true,
                 alertType: 'success',
                 alertText: action.payload.alertText
-            };
-        case SETUP_USER_ERROR:
+            }; */
+        /* case SETUP_USER_ERROR:
             return {
                 ...state,
                 showAlert: true,
                 alertType: 'danger',
                 alertText: action.payload.alertText,
                 isLoading: false,
-            };
-        case TOGGLE_SIDEBAR:
+            }; */
+        /* case TOGGLE_SIDEBAR:
             return {
                 ...state,
                 showSidebar: !state.showSidebar,
-            };
+            }; */
         case HANDLE_CHANGE:
             return {
                 ...state,
@@ -106,11 +106,11 @@ const actionDispatcher = (state, action) => {
                 ...state,
                 ...initialJobState,
             };
-        case ADD_JOB_BEGIN:
+        /* case ADD_JOB_BEGIN:
             return {
                 ...state,
                 isLoading: true,
-            };
+            }; */
         case ADD_JOB_SUCCESS:
             return {
                 ...state,
@@ -127,18 +127,18 @@ const actionDispatcher = (state, action) => {
                 alertText: action.payload.alertText,
                 isLoading: false
             }
-        case GET_JOBS_BEGINS:
-            return {
-                ...state,
-                isLoading: true,
-            }
-        case GET_JOBS_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                jobs: action.payload.jobs,
-                totalJobs: action.payload.totalJobs
-            }
+        /*  case GET_JOBS_BEGINS:
+             return {
+                 ...state,
+                 isLoading: true,
+             } */
+        /*  case GET_JOBS_SUCCESS:
+             return {
+                 ...state,
+                 isLoading: false,
+                 jobs: action.payload.jobs,
+                 totalJobs: action.payload.totalJobs
+             } */
         case EDIT_JOB_BEGINS:
             return {
                 ...state,

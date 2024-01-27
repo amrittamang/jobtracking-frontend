@@ -1,9 +1,10 @@
-import { useAppContext } from '../context/appContext';
 import { redirect, useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 const ProtectedRoute = ({ children }) => {
-    const { user, userLoading } = useAppContext();
+    const {user, userLoading} = useSelector(state => state.account);
     const navigate = useNavigate();
 
     // if (userLoading) return <Loading />;

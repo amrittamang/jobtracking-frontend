@@ -3,7 +3,6 @@ import Wrapper from '../assets/wrappers/LandingPage';
 import { Logo } from '../components';
 import { Link, Navigate } from 'react-router-dom';
 import main from '../assets/images/main.svg';
-import { useAppContext } from '../context/appContext';
 import { useSelector } from 'react-redux';
 
 const Landing = () => {
@@ -25,7 +24,8 @@ const Landing = () => {
                             quinoa lo-fi tote bag adaptogen everyday carry meggings +1 brunch
                             narwhal.
                         </p>
-                        <Link to='/register' className='btn btn-hero'>Login/Register</Link>
+                        <Link to='/login' className='btn btn-hero'>Login</Link>
+                        <Link to='/register' className='btn btn-hero'>Register</Link>
                     </div>
                     <img src={main} alt='job hunt' className='img main-img' />
                 </div>

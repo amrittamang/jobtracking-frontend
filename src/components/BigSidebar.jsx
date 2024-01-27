@@ -1,15 +1,15 @@
-import { useAppContext } from '../context/appContext'
+import { useSelector } from 'react-redux'
 import NavLinks from './NavLinks'
-import Logo from '../components/Logo'
+import Logo from './Logo'
 import Wrapper from '../assets/wrappers/BigSidebar'
 
 const BigSidebar = () => {
-  const { showSidebar } = useAppContext()
+  const { showSidebar } = useSelector((state) => state.sidebar)
   return (
     <Wrapper>
       <div
         className={
-          showSidebar ? 'sidebar-container ' : 'sidebar-container show-sidebar'
+          !showSidebar ? 'sidebar-container ' : 'sidebar-container show-sidebar'
         }
       >
         <div className='content'>

@@ -25,37 +25,16 @@ import {
 } from "./actions";
 import { useNavigate } from "react-router-dom";
 
+
+
 const initialState = {
-    userLoading: true,
     isLoading: false,
     showAlert: false,
     alertText: "",
     alertType: "",
-    user: null,
-    token: null,
-    userLocation: "",
     showSidebar: false,
-    isEditing: false,
-    editJobId: "",
-    position: "",
-    company: "",
-    jobLocation: "",
-    jobTypeOptions: ["full-time", "part-time", "remote", "internship"],
-    jobType: "full-time",
-    statusOptions: ["interview", "declined", "pending"],
-    status: "pending",
-    jobs: [],
-    totalJobs: 0,
-    numOfPages: 1,
-    page: 1,
-    stats: {},
-    monthlyApplications: [],
-    search: "",
-    searchStatus: "all",
-    searchType: "all",
-    sort: "latest",
-    sortOptions: ["latest", "oldest", "a-z", "z-a"],
-};
+}
+
 
 const AppContext = React.createContext();
 // const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
@@ -79,17 +58,6 @@ const AppProvider = ({ children }) => {
         }
     );
 
-    const displayAlert = () => {
-        dispatch({ type: SHOW_ALERT });
-        clearAlert();
-    };
-
-    const clearAlert = () => {
-        setTimeout(() => {
-            dispatch({ type: HIDE_ALERT });
-        }, 3000);
-    };
-
     const setupUser = async ({ currentUser, endPoint, alertText }) => {
         dispatch({ type: SETUP_USER_BEGIN });
         try {
@@ -109,7 +77,6 @@ const AppProvider = ({ children }) => {
                 payload: { alertText: error.response.data.msg },
             });
         }
-        clearAlert();
     };
 
     const logoutUser = async () => {
@@ -153,7 +120,6 @@ const AppProvider = ({ children }) => {
                 payload: { alertText: error.response.data.msg },
             });
         }
-        clearAlert();
     };
 
     const getJobs = async () => {
@@ -165,7 +131,6 @@ const AppProvider = ({ children }) => {
         } catch (error) {
             console.log('Error:', error);
         }
-        clearAlert();
     }
 
     const setEditJob = ({ jobId, position, company, jobLocation, jobType, status }) => {
@@ -192,7 +157,6 @@ const AppProvider = ({ children }) => {
             console.log('Error:', error);
             dispatch({ type: SHOW_ERROR_ALERT, payload: { alertText: error } })
         }
-        clearAlert();
     }
 
     const deleteJob = async (id) => {
@@ -211,14 +175,12 @@ const AppProvider = ({ children }) => {
         } catch (error) {
             dispatch({ type: SHOW_ERROR_ALERT, payload: { alertText: error } })
         }
-        clearAlert();
     }
 
     return (
         <AppContext.Provider
             value={{
                 ...state,
-                displayAlert,
                 setupUser,
                 toggleSidebar,
                 logoutUser,
@@ -239,4 +201,4 @@ const useAppContext = () => {
     return useContext(AppContext);
 };
 
-export { AppProvider, initialState, useAppContext, AppContext };
+export { AppProvider, useAppContext, AppContext };
