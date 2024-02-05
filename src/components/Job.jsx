@@ -3,7 +3,9 @@ import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import Wrapper from '../assets/wrappers/Job'
 import JobInfo from './JobInfo'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { jobAction } from '../store/job-slice';
+import { alertAction } from '../store/alert-slice';
 
 const Job = ({
     _id,
@@ -14,7 +16,33 @@ const Job = ({
     createdAt,
     status,
 }) => {
-    const { setEditJob, deleteJob } = useSelector(state => state.job);
+    const { } = useSelector(state => state.job);
+    const dispatch = useDispatch();
+
+    // const baseURL = 'https:/ / jobify - api - g1x9.onrender.com / api / v1';
+    const baseURL = 'http://localhost:3000/api/v1'
+
+    const setEditJob = () => {
+        dispatch(jobAction.editJobBegins({ jobId: _id, position, company, jobLocation, jobType, status }))
+    }
+
+    const deleteJob = async () => {
+        try {
+            const response = await fetch(`${baseURL}/jobs/${_id}`, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            dispatch(alertAction.showAlert({ alertText: 'Job deleted successfully', alertType: 'success' }));
+            // getJobs();
+        } catch (error) {
+            dispatch(alertAction.showAlert({ alertText: error }));
+        }
+    };
 
     let date = moment(createdAt)
     date = date.format('MMM Do, YYYY')
@@ -39,7 +67,7 @@ const Job = ({
                         <Link
                             to='/add-job'
                             className='btn edit-btn'
-                            onClick={() => setEditJob({ jobId: _id, position, company, jobLocation, jobType, status })}
+                            onClick={setEditJob}
                         >
                             Edit
                         </Link>

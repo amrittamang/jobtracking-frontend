@@ -50,6 +50,18 @@ const jobSlice = createSlice({
                 isLoading: false,
                 showAlert: true,
             }
+        },
+        editJobBegins(state, action) {
+            state.isEditing = true;
+            state.editJobId = action.payload.jobId;
+            state.position = action.payload.position;
+            state.company = action.payload.company;
+            state.jobLocation = action.payload.jobLocation;
+            state.jobType = action.payload.jobType;
+            state.status = action.payload.status;
+        },
+        clearJob(state, action) {
+            state = initialStateJob;
         }
     }
 });

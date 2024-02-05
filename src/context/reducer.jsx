@@ -29,20 +29,20 @@ const actionDispatcher = (state, action) => {
                 alertType: 'danger',
                 alertText: 'Please provide all values!',
             }; */
-        case SHOW_SUCCESS_ALERT:
-            return {
-                ...state,
-                showAlert: true,
-                alertType: 'success',
-                alertText: action.payload.alertText || 'Operation Successful'
-            };
-        case SHOW_ERROR_ALERT:
-            return {
-                ...state,
-                showAlert: true,
-                alertType: 'danger',
-                alertText: action.payload.alertText || 'Something went wrong! Please try again later.'
-            };
+        /*  case SHOW_SUCCESS_ALERT:
+             return {
+                 ...state,
+                 showAlert: true,
+                 alertType: 'success',
+                 alertText: action.payload.alertText || 'Operation Successful'
+             };
+         case SHOW_ERROR_ALERT:
+             return {
+                 ...state,
+                 showAlert: true,
+                 alertType: 'danger',
+                 alertText: action.payload.alertText || 'Something went wrong! Please try again later.'
+             }; */
         /* case HIDE_ALERT:
             return {
                 ...state,
@@ -139,17 +139,17 @@ const actionDispatcher = (state, action) => {
                  jobs: action.payload.jobs,
                  totalJobs: action.payload.totalJobs
              } */
-        case EDIT_JOB_BEGINS:
-            return {
-                ...state,
-                isEditing: true,
-                editJobId: action.payload.jobId,
-                position: action.payload.position,
-                company: action.payload.company,
-                jobLocation: action.payload.jobLocation,
-                jobType: action.payload.jobType,
-                status: action.payload.status
-            }
+        /*  case EDIT_JOB_BEGINS:
+             return {
+                 ...state,
+                 isEditing: true,
+                 editJobId: action.payload.jobId,
+                 position: action.payload.position,
+                 company: action.payload.company,
+                 jobLocation: action.payload.jobLocation,
+                 jobType: action.payload.jobType,
+                 status: action.payload.status
+             } */
         default:
             break;
     }
