@@ -19,6 +19,15 @@ You will also see any lint errors in the console.
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
+** Note: While running test I got "ReferenceError: TextEncoder is not defined" **
+
+- Create setupTests.js file inside src folder and add following code
+  ```js
+  import { TextEncoder } from "node:util";
+  global.TextEncoder = TextEncoder;
+  ```
+- Update node to > v14, remove node_modules and reinstall packages
+
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
