@@ -3,6 +3,7 @@ import { Logo, FormRow, Alert } from '../components';
 import Wrapper from "../assets/wrappers/LandingPage";
 import { Form, useNavigate } from 'react-router-dom';
 import { accountAction } from '../store/account-slice';
+import { alertAction } from '../store/alert-slice';
 import axios from "axios";
 import {
     useSelector,
@@ -59,20 +60,20 @@ const Register = () => {
             dispatch(accountAction.setUpUserSuccess({ user, location, alertText, token }));
         } catch (error) {
 
-            dispatch(accountAction.setUpUserError({ alertText: error.response.data.msg }))
+            dispatch(alertAction.showAlert({ alertType: 'danger', alertText: error.response.data.msg }))
         }
         setTimeout(() => {
-            dispatch(accountAction.hideAlert());
+            dispatch(alertAction.hideAlert());
         }, 3000);
     };
 
     const onSubmit = (e) => {
         e.preventDefault();
         const { name, email, password } = values;
-        if (!email || !password ) {
-            dispatch(accountAction.showAlert());
+        if (!email || !password) {
+            dispatch(alertAction.showAlert({ alertType: 'danger', alertText: 'Please provide all values' }));
             setTimeout(() => {
-                dispatch(accountAction.hideAlert());
+                dispatch(alertAction.hideAlert());
             }, 3000);
             return;
         }
