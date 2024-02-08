@@ -18,7 +18,8 @@ const initialState = {
 const Register = () => {
     const navigate = useNavigate();
     const [values, setValues] = useState(initialState);
-    const { user, isLoading, showAlert } = useSelector(state => state.account);
+    const { user, userLoading } = useSelector(state => state.account);
+    const { showAlert } = useSelector(state => state.alert);
     const dispatch = useDispatch();
 
     // const baseURL = 'https://jobify-api-g1x9.onrender.com/api/v1';
@@ -48,7 +49,7 @@ const Register = () => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const setupUser = async ({ currentUser, alertText }) => {
+    const setupUser = async (currentUser) => {
         dispatch(accountAction.setUpUserBegin());
         try {
             const { data } = await authFetch.post(
@@ -57,7 +58,8 @@ const Register = () => {
             );
 
             const { user, location, token } = data;
-            dispatch(accountAction.setUpUserSuccess({ user, location, alertText, token }));
+            dispatch(accountAction.setUpUserSuccess({ user, location, token }));
+            dispatch(alertAction.showAlert({ alertType: 'success', alertText: 'Registration success. Redirecting !' }))
         } catch (error) {
 
             dispatch(alertAction.showAlert({ alertType: 'danger', alertText: error.response.data.msg }))
@@ -78,10 +80,7 @@ const Register = () => {
             return;
         }
         const currentUser = { name, email, password };
-        setupUser({
-            currentUser,
-            alertText: 'User Created! Redirecting...',
-        });
+        setupUser(currentUser);
     };
 
     useEffect(() => {
@@ -118,21 +117,7 @@ const Register = () => {
                     value={values.password}
                     handleChange={handleChange}
                 />
-                <button type="submit" className="btn btn-block" disabled={isLoading}>submit</button>
-                <button
-                    type="button"
-                    className="btn btn-block btn-hipster"
-                    disabled={isLoading}
-                    onClick={() => {
-                        setupUser({
-                            currentUser: { email: 'admin@admin.com', password: 'admin123' },
-                            endPoint: 'login',
-                            alertText: 'Login Successful! Redirecting...',
-                        });
-                    }}
-                >
-                    {isLoading ? 'loading' : 'demo app'}
-                </button>
+                <button type="submit" className="btn btn-block" disabled={userLoading}>submit</button>
                 <p>
                     <span onClick={() => navigate('/login')}>Login</span>
                 </p>
