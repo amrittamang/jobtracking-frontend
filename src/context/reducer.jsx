@@ -111,14 +111,14 @@ const actionDispatcher = (state, action) => {
                 ...state,
                 isLoading: true,
             }; */
-        case ADD_JOB_SUCCESS:
-            return {
-                ...state,
-                isLoading: false,
-                showAlert: true,
-                alertType: 'success',
-                alertText: action.payload.alertText
-            }
+        /*  case ADD_JOB_SUCCESS:
+             return {
+                 ...state,
+                 isLoading: false,
+                 showAlert: true,
+                 alertType: 'success',
+                 alertText: action.payload.alertText
+             } */
         case ADD_JOB_ERROR:
             return {
                 ...state,

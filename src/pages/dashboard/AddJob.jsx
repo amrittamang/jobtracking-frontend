@@ -1,194 +1,214 @@
-import React from 'react'
-import Wrapper from '../../assets/wrappers/DashboardFormPage'
-import { Alert, FormRow, FormRowSelect } from '../../components';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import Wrapper from "../../assets/wrappers/DashboardFormPage";
+import { Alert, FormRow, FormRowSelect } from "../../components";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import {
-  HANDLE_CHANGE,
-  CREATE_JOB,
-  EDIT_JOB,
-  CLEAR_JOB,
-  ADD_JOB_BEGIN,
-  ADD_JOB_SUCCESS,
-  ADD_JOB_ERROR,
-  SHOW_SUCCESS_ALERT,
-  SHOW_ERROR_ALERT,
-  HIDE_ALERT,
-} from '../../context/actions';
+import { jobAction } from "../../store/job-slice";
+import { alertAction } from "../../store/alert-slice";
 
 const AddJob = () => {
-  const baseURL = 'http://localhost:3000/api/v1';
+  const baseURL = "http://localhost:3000/api/v1";
   const {
     isLoading,
     isEditing,
-    showAlert,
-    displayAlert,
     position,
     company,
     jobLocation,
+    status,
     jobType,
     jobTypeOptions,
-    status,
     statusOptions,
-    clearValues,
-    token,
-    editJobId
-  } = useSelector(state => state.job);
+    editJobId,
+  } = useSelector((state) => state.job);
+  const { showAlert } = useSelector((state) => state.alert);
+  const { token } = useSelector((state) => state.account);
 
+  const initialState = isEditing
+    ? {
+      position,
+      company,
+      jobLocation,
+      status,
+      jobType,
+    }
+    : {
+      position: "",
+      company: "",
+      jobLocation: "",
+      status: "",
+      jobType: "",
+    };
+
+  const [values, setValues] = useState(initialState);
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     /*  if (!position || !company || !jobLocation) {
      displayAlert()
      return
      } */
-    const job = { position, company, jobLocation, jobType, status };
+    const job = {
+      position: values.position,
+      company: values.company,
+      jobLocation: values.jobLocation,
+      jobType: values.jobType,
+      status: values.status,
+    };
     if (isEditing) {
-      editJob()
-      return
+      editJob(job);
+      return;
     }
-    createJob({ job, alertText: 'Job added successfully' });
-  }
-
-  const createJob = async ({ job, alertText }) => {
-    dispatch({ type: ADD_JOB_BEGIN });
-    try {
-      const res = await axios.post(
-        `${baseURL}/jobs`,
-        job,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-      dispatch({
-        type: ADD_JOB_SUCCESS,
-        payload: { alertText },
-      });
-      dispatch({ type: CLEAR_JOB });
-    } catch (error) {
-      console.log("Error in create job", error);
-      dispatch({
-        type: ADD_JOB_ERROR,
-        payload: { alertText: error.response.data.msg },
-      });
-    }
-    clearAlert();
+    createJob(job);
   };
 
-  const editJob = async (id) => {
+  const createJob = async (job) => {
+    dispatch(jobAction.addJobBegin());
+    try {
+      const { data } = await axios.post(`${baseURL}/jobs`, job, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      dispatch(jobAction.addJobSuccess(data?.job));
+      dispatch(
+        alertAction.showAlert({
+          alertType: "success",
+          alertText: "Job added successfully",
+        })
+      );
+      clearJob();
+    } catch (error) {
+      console.log("Error in create job", error.response.data.msg);
+      dispatch(
+        alertAction.showAlert({
+          alertType: "danger",
+          alertText: error.response.data.msg,
+        })
+      );
+
+    }
+    dispatch(jobAction.addJobError());
+    setTimeout(() => {
+      dispatch(alertAction.hideAlert());
+    }, 3000);
+  };
+
+  const editJob = async (job) => {
     try {
       const res = await fetch(`${baseURL}/jobs/${editJobId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ position, company, jobLocation, jobType, status })
+        body: JSON.stringify(job),
       });
       if (!res.ok) {
         throw new Error(res.statusText);
       }
       const product = await res.json();
-      console.log('Product:', product);
-      dispatch({ type: SHOW_SUCCESS_ALERT, payload: { alertText: 'Job edited successfully!' } })
+      console.log("Product:", product);
+      dispatch(
+        alertAction.showAlert({
+          alertType: "success",
+          alertText: "Job edited successfully!",
+        })
+      );
     } catch (error) {
-      console.log('Error:', error);
-      dispatch({ type: SHOW_ERROR_ALERT, payload: { alertText: error } })
+      console.log("Error:", error);
+      dispatch(
+        alertAction.showAlert({ alertType: "danger", alertText: error })
+      );
     }
-    clearAlert();
-  }
-
-  const clearAlert = () => {
     setTimeout(() => {
-      dispatch({ type: HIDE_ALERT });
+      dispatch(alertAction.hideAlert());
     }, 3000);
   };
 
-  const handleChange = (name, value) => {
-    dispatch({
-      type: HANDLE_CHANGE,
-      payload: {
-        [name]: value,
-      },
-    });
+  const handleJobInput = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-
-  const handleJobInput = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-    handleChange(name, value)
-  }
+  const clearJob = () =>
+    setValues({
+      position: "",
+      company: "",
+      jobLocation: "",
+      status: "",
+      jobType: "",
+    });
 
   return (
     <Wrapper>
-      <form className='form'>
-        <h3>{isEditing ? 'edit job' : 'add job'}</h3>
+      <form className="form">
+        <h3>{isEditing ? "edit job" : "add job"}</h3>
         {showAlert && <Alert />}
-        <div className='form-center'>
+        <div className="form-center">
           {/* position */}
           <FormRow
-            type='text'
-            name='position'
-            value={position}
+            type="text"
+            name="position"
+            value={values.position}
             handleChange={handleJobInput}
           />
           {/* company */}
           <FormRow
-            type='text'
-            name='company'
-            value={company}
+            type="text"
+            name="company"
+            value={values.company}
             handleChange={handleJobInput}
           />
           {/* location */}
           <FormRow
-            type='text'
-            labelText='job location'
-            name='jobLocation'
-            value={jobLocation}
+            type="text"
+            labelText="job location"
+            name="jobLocation"
+            value={values.jobLocation}
             handleChange={handleJobInput}
           />
           {/* job status */}
           <FormRowSelect
-            name='status'
-            value={status}
+            name="status"
+            value={values.status}
             handleChange={handleJobInput}
             list={statusOptions}
           />
           {/* job type */}
           <FormRowSelect
-            name='jobType'
-            labelText='job type'
-            value={jobType}
+            name="jobType"
+            labelText="job type"
+            value={values.jobType}
             handleChange={handleJobInput}
             list={jobTypeOptions}
           />
           {/* btn container */}
-          <div className='btn-container'>
+          <div className="btn-container">
             <button
-              type='submit'
-              className='btn btn-block submit-btn'
+              type="submit"
+              className="btn btn-block submit-btn"
               onClick={handleSubmit}
               disabled={isLoading}
             >
               submit
             </button>
-            <button
-              className='btn btn-block clear-btn'
-              onClick={(e) => {
-                e.preventDefault()
-                clearValues()
-              }}
-            >
-              clear
-            </button>
+            {!isEditing &&
+              <button
+                className="btn btn-block clear-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  clearJob();
+                }}
+              >
+                clear
+              </button>
+            }
           </div>
         </div>
       </form>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default AddJob
+export default AddJob;

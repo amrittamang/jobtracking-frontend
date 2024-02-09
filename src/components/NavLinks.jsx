@@ -14,7 +14,7 @@ const NavLinks = () => {
           <NavLink
             to={path}
             key={id}
-            onClick={() => dispatch(sidebarAction.toggleSidebar())}
+            // onClick={() => dispatch(sidebarAction.toggleSidebar())}
             className={({ isActive }) =>
               isActive ? 'nav-link active' : 'nav-link'
             }

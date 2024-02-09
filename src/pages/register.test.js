@@ -38,6 +38,7 @@ test('name input should be rendered', () => {
 
 test('alert should not be visible', () => {
     render(<Router><Provider store={store}><Register /></Provider></Router>);
+    screen.debug();
     const errElement = screen.queryByTestId('alert');
     expect(errElement).not.toBeInTheDocument();
 })
@@ -92,7 +93,7 @@ test('submit button should be disabled while loading', () => {
     // expect(button).toBeDisabled();
     const errAlertText = screen.queryByTestId('alert');
     expect(errAlertText).not.toBeInTheDocument();
-    screen.debug();
+    // screen.debug();
 
 })
 // });

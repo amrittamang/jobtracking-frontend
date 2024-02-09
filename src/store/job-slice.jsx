@@ -1,9 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit';
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialStateJob = {
     isLoading: false,
-    showAlert: false,
     isEditing: false,
     editJobId: "",
     position: "",
@@ -24,10 +22,10 @@ const initialStateJob = {
     searchType: "all",
     sort: "latest",
     sortOptions: ["latest", "oldest", "a-z", "z-a"],
-}
+};
 
 const jobSlice = createSlice({
-    name: 'job-slice',
+    name: "job-slice",
     initialState: initialStateJob,
     reducers: {
         getJobsBegins(state, action) {
@@ -41,15 +39,17 @@ const jobSlice = createSlice({
                 ...state,
                 isLoading: false,
                 jobs: action.payload.jobs,
-                totalJobs: action.payload.totalJobs
-            }
+                totalJobs: action.payload.totalJobs,
+            };
         },
         addJobSuccess(state, action) {
             return {
                 ...state,
                 isLoading: false,
-                showAlert: true,
-            }
+            };
+        },
+        addJobError(state, action) {
+            state.isLoading = false;
         },
         editJobBegins(state, action) {
             state.isEditing = true;
@@ -60,10 +60,7 @@ const jobSlice = createSlice({
             state.jobType = action.payload.jobType;
             state.status = action.payload.status;
         },
-        clearJob(state, action) {
-            state = initialStateJob;
-        }
-    }
+    },
 });
 
 export default jobSlice.reducer;

@@ -15,6 +15,7 @@ const Job = ({
     jobType,
     createdAt,
     status,
+    getJobs
 }) => {
     const { } = useSelector(state => state.job);
     const dispatch = useDispatch();
@@ -38,10 +39,14 @@ const Job = ({
                 throw new Error(response.statusText);
             }
             dispatch(alertAction.showAlert({ alertText: 'Job deleted successfully', alertType: 'success' }));
-            // getJobs();
+            getJobs();
         } catch (error) {
-            dispatch(alertAction.showAlert({ alertText: error }));
+            dispatch(alertAction.showAlert({ alertType: 'danger', alertText: error }));
         }
+        setTimeout(() => {
+            dispatch(alertAction.hideAlert());
+        }, 3000);
+
     };
 
     let date = moment(createdAt)
@@ -74,7 +79,7 @@ const Job = ({
                         <button
                             type='button'
                             className='btn delete-btn'
-                            onClick={() => deleteJob(_id)}
+                            onClick={deleteJob}
                         >
                             Delete
                         </button>

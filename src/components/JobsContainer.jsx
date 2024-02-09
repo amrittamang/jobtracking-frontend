@@ -16,8 +16,8 @@ const JobsContainer = () => {
         isLoading,
         jobs,
         totalJobs,
-        showAlert
     } = useSelector(state => state.job);
+    const { showAlert } = useSelector(state => state.alert);
     const dispatch = useDispatch();
     // axios
     const authFetch = axios.create({
@@ -79,7 +79,7 @@ const JobsContainer = () => {
             </h5>
             <div className='jobs'>
                 {jobs.map((job) => {
-                    return <Job key={job._id} {...job} />
+                    return <Job key={job._id} {...job} getJobs={getJobs} />
                 })}
             </div>
         </Wrapper>
