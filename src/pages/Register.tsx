@@ -4,7 +4,15 @@ import Wrapper from "assets/wrappers/LandingPage";
 import { useAppContext } from "../context/appContext";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-const initialState = {
+
+type InitialState = {
+  name: string;
+  email: string;
+  password: string;
+  isMember: boolean;
+};
+
+const initialState: InitialState = {
   name: "",
   email: "",
   password: "",
