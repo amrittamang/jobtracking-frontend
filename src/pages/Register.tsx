@@ -12,7 +12,7 @@ type InitialState = {
   isMember: boolean;
 };
 
-const initialState: InitialState = {
+const initialState = {
   name: "",
   email: "",
   password: "",
@@ -21,7 +21,7 @@ const initialState: InitialState = {
 
 const Register = () => {
   const navigate = useNavigate();
-  const [values, setValues] = useState(initialState);
+  const [values, setValues] = useState<InitialState>(initialState);
   const { user, isLoading, showAlert, displayAlert, setupUser } =
     useAppContext();
 
